@@ -2,41 +2,57 @@
     import styled from 'styled-components';
     import svgLogo from './logo.svg';
     import headerBackground from './fundo.png';
-    import presentationImage from './apresentacao.png'; // Imagem de apresentação
+    import Presentation from './apresentacao/apresen'
 
     const HeaderContainer = styled.header`
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px;
-    background-image: url(${headerBackground});
-    background-size: cover;
-    background-position: center;
-    `;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  background-image: url(${headerBackground});
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  position: relative;
+  box-sizing: border-box; /* Garante que o padding não sobrecarregue a largura */
+`;
 
-    const Title = styled.h1`
+  
+  const Title = styled.h1`
     font-size: 24px;
-    color: #333;
-    `;
-
-    const LogoContainer = styled.div`
-    flex: 1;
+    color: #e66767;
+    margin: 0; /* Evita que o título tenha margem extra */
+  `;
+  
+  const LogoContainer = styled.div`
     display: flex;
-    justify-content: center;
-    `;
+    align-items: center; /* Alinha a logo verticalmente */
+  `;
+  
+  const CartInfo = styled.div`
+  font-size: 18px;
+  color: #e66767;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  max-width: 100%; /* Garante que o CartInfo não ultrapasse a largura do HeaderContainer */
+  overflow: hidden; /* Oculta qualquer conteúdo que ultrapasse a área */
+`;
 
-    const CartInfo = styled.div`
-    font-size: 18px;
-    color: #333;
-    cursor: pointer;
-    `;
+  
+  
+
 
     const ProductsContainer = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    padding: 20px;
-    `;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);  /* Define 3 colunas com espaçamento igual */
+  gap: 20px;  /* Espaçamento entre os itens */
+  padding: 10px;
+  justify-items: center;  /* Garante que os itens fiquem centralizados nas colunas */
+  max-width: 90%;
+  margin: 0 auto;
+`;
+
 
     const ProductContainer = styled.div`
     display: flex;
@@ -243,12 +259,8 @@
             {cartCount} itens no carrinho
             </CartInfo>
         </HeaderContainer>
-
-        {/* Seção de apresentação do produto */}
-        <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-            <img src={presentationImage} alt="Apresentação do Produto" style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px' }} />
-            <h2>Explore os nossos produtos</h2>
-        </div>
+        {/* Inserindo o componente Presentation aqui */}
+        <Presentation />
 
         {/* Exibição dos produtos */}
         <ProductsContainer>

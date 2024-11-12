@@ -1,26 +1,47 @@
-import React from 'react';
-import styled from 'styled-components';
-import footerImage from './footerImage.png'; 
-const FooterContainer = styled.footer`
-    width: 100%;
+    import styled from 'styled-components';
+    import LogoPng from './logo.png';  // novo logo em PNG
+    import PngIcon1 from './Group.png';
+    import PngIcon2 from './instagram.png';
+    import PngIcon3 from './facebook.png';
+
+    const FooterContainer = styled.footer`
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    padding: 20px 0;
-    background-color: #f5f5f5; /* Cor de fundo opcional */
-`;
+    background-color: #FFEBD9;
+    padding: 20px;
+    `;
 
-const FooterImage = styled.img`
-    max-width: 100%;
-    height: auto;
-`;
+    const IconsContainer = styled.div`
+    display: flex;
+    gap: 10px;
+    margin: 10px 0;
+    `;
 
-const Footer = () => {
+    const FooterText = styled.p`
+    color: #E66767;
+    font-size: 1.2em;
+    text-align: center;
+    max-width: 600px;
+    `;
+
+    const IconImage = styled.img`
+    width: 24px;
+    height: 24px;
+    `;
+
+    export default function Footer() {
     return (
         <FooterContainer>
-            <FooterImage src={footerImage} alt="Rodapé" />
+        <img src={LogoPng} alt="Logo" /> {/* Usando o logo PNG */}
+        <IconsContainer>
+            <IconImage src={PngIcon1} alt="Ícone Grupo" />
+            <IconImage src={PngIcon2} alt="Ícone Instagram" />
+            <IconImage src={PngIcon3} alt="Ícone Facebook" />
+        </IconsContainer>
+        <FooterText>
+            A efood é uma plataforma para divulgação de estabelecimentos. A responsabilidade pela entrega e qualidade dos produtos é toda do estabelecimento contratado.
+        </FooterText>
         </FooterContainer>
     );
-};
-
-export default Footer;
+    }
