@@ -10,7 +10,7 @@ const ItemListContainer = styled.div`
     justify-items: center;
     padding: 10px;
     color: #E66767;
-    max-width: 47%; /* Largura de 47% */
+    max-width: 650px; /* Largura de 47% */
     margin: 0 auto; /* Centraliza o contêiner */
 `;
 

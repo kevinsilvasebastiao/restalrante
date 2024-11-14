@@ -4,54 +4,69 @@
     import headerBackground from './fundo.png';
     import Presentation from './apresentacao/apresen'
 
-    const HeaderContainer = styled.header`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px;
-  background-image: url(${headerBackground});
-  background-size: cover;
-  background-position: center;
-  width: 100%;
-  position: relative;
-  box-sizing: border-box; /* Garante que o padding não sobrecarregue a largura */
-`;
+    const HeaderBackground = styled.div`
+    width: 100%;
+    background-image: url(${headerBackground});
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    height: 200px; /* Altura do header */
+  `;
+  
+  const HeaderContainer = styled.header`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    width: 100%;
+    max-width: 1440px; /* Limita o tamanho máximo do conteúdo */
+    margin: 0 auto; /* Centraliza o conteúdo do header */
+    box-sizing: border-box;
+    height: 100%; /* Garante que ocupe toda a altura do HeaderBackground */
+  
+    /* Espaçamento menor entre os itens */
+    & > *:not(:last-child) {
+      margin-right: 10px;
+    }
+  `;
 
   
   const Title = styled.h1`
     font-size: 24px;
     color: #e66767;
-    margin: 0; /* Evita que o título tenha margem extra */
+    margin: 0;
+    padding: 0 5px; /* Pequeno padding para evitar encostarem nas bordas */
   `;
   
   const LogoContainer = styled.div`
     display: flex;
-    align-items: center; /* Alinha a logo verticalmente */
+    align-items: center;
+    margin-right: 5px; /* Mantém a logo próxima ao título */
   `;
   
   const CartInfo = styled.div`
-  font-size: 18px;
-  color: #e66767;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  max-width: 100%; /* Garante que o CartInfo não ultrapasse a largura do HeaderContainer */
-  overflow: hidden; /* Oculta qualquer conteúdo que ultrapasse a área */
-`;
-
+    font-size: 18px;
+    color: #e66767;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 0 5px; /* Pequeno padding para manter um espaçamento consistente */
+    overflow: hidden;
+    white-space: nowrap; /* Mantém o conteúdo numa única linha */
+  `;
   
-  
 
-
-    const ProductsContainer = styled.div`
+  const ProductsContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);  /* Define 3 colunas com espaçamento igual */
-  gap: 20px;  /* Espaçamento entre os itens */
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
   padding: 10px;
-  justify-items: center;  /* Garante que os itens fiquem centralizados nas colunas */
-  max-width: 90%;
+  justify-items: center;
+  width: 100%;
+  max-width: 1440px;
   margin: 0 auto;
 `;
+
 
 
     const ProductContainer = styled.div`
@@ -250,6 +265,7 @@
 
     return (
         <>
+        <HeaderBackground>
         <HeaderContainer>
         <Title>Restaurante</Title>
             <LogoContainer>
@@ -259,6 +275,8 @@
             {cartCount} itens no carrinho
             </CartInfo>
         </HeaderContainer>
+        </HeaderBackground>
+
         {/* Inserindo o componente Presentation aqui */}
         <Presentation />
 
