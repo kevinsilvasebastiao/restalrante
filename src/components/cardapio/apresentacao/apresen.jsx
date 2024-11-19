@@ -25,7 +25,11 @@ const PresentationTextContainer = styled.div`
   align-items: flex-start;  /* Alinha os textos à esquerda */
   text-align: left;  /* Alinha o texto à esquerda */
   z-index: 1;
-  margin-right: 50%;
+  margin-right: 40%;
+
+  @media (min-width: 1920px) {
+        margin-right: 30%;
+    }
 `;
 
 // Texto "La Dolce Vita"
