@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import headerImage from './headerImage.png';
+import Logo from './logo.svg';
 
 const HeaderContainer = styled.header`
   width: 100%;
   height: 200px;
-  background-image: url(${headerImage});
+  background-color: #FFEBD9;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -13,7 +13,6 @@ const HeaderContainer = styled.header`
   top: 0;
   opacity: 1;
 
-  /* Centraliza e limita a largura do conteúdo */
   @media (min-width: 768px) {
     height: 300px;
   }
@@ -35,19 +34,49 @@ const HeaderContainer = styled.header`
 
 const ContentWrapper = styled.div`
   width: 100%;
-  max-width: 1920px; /* Limita o conteúdo interno para evitar expansão em telas grandes */
+  max-width: 1920px;
   margin: 0 auto;
-  padding: 0 20px; /* Adiciona um padding lateral para o conteúdo não encostar nas bordas */
+  padding: 0 20px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100%; /* Garante que o conteúdo ocupe toda a altura do header */
+  height: 100%;
+`;
+
+const LogoImage = styled.img`
+  width: 150px;
+  height: auto;
+  margin-bottom: 20px;
+`;
+
+const HeaderText = styled.h1`
+  font-family: 'Roboto', sans-serif;
+  font-size: 36px;
+  font-weight: 900;
+  line-height: 42.19px;
+  text-align: center;
+  color: #E66767;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+
+  @media (min-width: 768px) {
+    font-size: 42px;
+    line-height: 48px;
+  }
+
+  @media (min-width: 1024px) {
+    font-size: 48px;
+    line-height: 54px;
+  }
 `;
 
 const Header = () => {
   return (
     <HeaderContainer>
       <ContentWrapper>
+        <LogoImage src={Logo} alt="Logo do Restaurante" />
+        <HeaderText>Viva experiências gastronômicas no conforto da sua casa</HeaderText>
       </ContentWrapper>
     </HeaderContainer>
   );

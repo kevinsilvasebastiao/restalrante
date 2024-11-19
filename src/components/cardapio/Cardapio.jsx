@@ -14,16 +14,21 @@
     `;
     
     const HeaderContainer = styled.header`
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 10px 20px;
-        width: 50%;
-        max-width: 1440px; /* Limita o tamanho máximo do conteúdo */
-        margin: 0 auto; /* Centraliza o conteúdo do header */
-        box-sizing: border-box;
-        height: 100%; /* Garante que ocupe toda a altura do HeaderBackground */
-    `;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    width: 50%;
+    max-width: 1440px; /* Limita o tamanho máximo do conteúdo */
+    margin: 0 auto; /* Centraliza o conteúdo do header */
+    box-sizing: border-box;
+    height: 100%; /* Garante que ocupe toda a altura do HeaderBackground */
+
+    @media (min-width: 2560px) {
+        max-width: 923px; /* Define o max-width para QHD */
+    }
+`;
+
 
     
     const Title = styled.h1`
@@ -58,7 +63,7 @@
     padding: 10px;
     justify-items: center;
     width: 100%;
-    max-width: 1440px;
+    max-width: 899px;
     margin: 0 auto;
     `;
 
@@ -68,7 +73,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        margin: 20px;
+        margin: 0 auto;
         border: 1px solid #ccc;
         padding: 20px;
         border-radius: 8px;
