@@ -118,6 +118,7 @@ const HeaderAndProducts = () => {
     const [modalProduct, setModalProduct] = useState(null);
     const [cartItems, setCartItems] = useState([]);
     const [isPaymentVisible, setPaymentVisible] = useState(false);
+
     const openModal = (product) => {
         setModalProduct(product);
     };
@@ -168,13 +169,56 @@ const HeaderAndProducts = () => {
     };
 
     const products = [
-        { id: 1, name: 'Pizza Marguerita', price: 30, image: require('./pizza.png'), shortDescription: 'A clássica Marguerita' },
-        { id: 2, name: 'Pizza Marguerita', price: 35, image: require('./pizza.png'), shortDescription: 'A clássica Marguerita' },
-        { id: 3, name: 'Pizza Marguerita', price: 30, image: require('./pizza.png'), shortDescription: 'A clássica Marguerita' },
-        { id: 4, name: 'Pizza Marguerita', price: 35, image: require('./pizza.png'), shortDescription: 'A clássica Marguerita' },
-        { id: 5, name: 'Pizza Marguerita', price: 30, image: require('./pizza.png'), shortDescription: 'A clássica Marguerita' },
-        { id: 6, name: 'Pizza Marguerita', price: 35, image: require('./pizza.png'), shortDescription: 'A clássica Marguerita' },
+        { 
+            id: 1, 
+            name: 'Pizza Marguerita', 
+            price: 30, 
+            image: require('./pizza.png'), 
+            shortDescription: 'A clássica Marguerita', 
+            description: 'Uma pizza saborosa feita com molho de tomate, manjericão fresco e queijo mussarela de alta qualidade.' 
+        },
+        { 
+            id: 2, 
+            name: 'Pizza Quatro Queijos', 
+            price: 35, 
+            image: require('./pizza.png'), 
+            shortDescription: 'A favorita dos amantes de queijo', 
+            description: 'Uma combinação irresistível de queijo mussarela, parmesão, gorgonzola e provolone.' 
+        },
+        { 
+            id: 3, 
+            name: 'Pizza Portuguesa', 
+            price: 40, 
+            image: require('./pizza.png'), 
+            shortDescription: 'Tradicional e deliciosa', 
+            description: 'Pizza com presunto, ovos, cebolas, azeitonas e um toque especial de orégano.' 
+        },
+        { 
+            id: 4, 
+            name: 'Pizza Pepperoni', 
+            price: 38, 
+            image: require('./pizza.png'), 
+            shortDescription: 'Sabor marcante e picante', 
+            description: 'Coberta com fatias de pepperoni, queijo mussarela e um toque de pimenta.' 
+        },
+        { 
+            id: 5, 
+            name: 'Pizza Vegetariana', 
+            price: 32, 
+            image: require('./pizza.png'), 
+            shortDescription: 'Opção leve e saudável', 
+            description: 'Repleta de vegetais frescos como tomate, pimentão, cebola e azeitonas, combinados com queijo mussarela.' 
+        },
+        { 
+            id: 6, 
+            name: 'Pizza Frango com Catupiry', 
+            price: 36, 
+            image: require('./pizza.png'), 
+            shortDescription: 'Clássico dos sabores brasileiros', 
+            description: 'Pizza com suculentos pedaços de frango desfiado e um toque cremoso de catupiry.' 
+        },
     ];
+    
 
     const cartCount = cartItems.length;
     const totalPrice = cartItems.reduce((sum, item) => sum + item.price, 0);
