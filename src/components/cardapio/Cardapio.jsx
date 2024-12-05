@@ -1,13 +1,12 @@
-import React, { useState } from "react";
-import styled from 'styled-components';
-import svgLogo from './logo.svg';
-import headerBackground from './fundo.png';
-import Presentation from './apresentacao/apresen';
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import styled from "styled-components";
+import svgLogo from "./logo.svg";
+import headerBackground from "./fundo.png";
 import ModalProduto from "../Modals/ProductModal/ProductModal";
 import CartModal from "../Modals/CartModal/CartModal";
 import DeliveryModal from "../Modals/DeliveryModal/DeliveryModal";
 import PaymentModal from "../Modals/PaymentModal/PaymentModal";
-import ConfirmationModal from "../Modals/ConfirmationModal/ConfirmationModal";
 
 const HeaderBackground = styled.div`
     width: 100%;
@@ -23,7 +22,6 @@ const HeaderContainer = styled.header`
     align-items: center;
     justify-content: space-between;
     padding: 10px 20px;
-    width: 50%;
     max-width: 1440px;
     margin: 0 auto;
     box-sizing: border-box;
@@ -50,17 +48,23 @@ const CartInfo = styled.div`
     display: flex;
     align-items: center;
     padding: 0 5px;
-    overflow: hidden;
     white-space: nowrap;
+`;
+
+const Description = styled.p`
+    font-size: 16px;
+    color: #e66767;
+    text-align: center;
+    margin: 20px auto;
+    max-width: 900px;
 `;
 
 const ProductsContainer = styled.div`
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
-    padding: 10px;
+    padding: 20px;
     justify-items: center;
-    width: 100%;
     max-width: 899px;
     margin: 0 auto;
 `;
@@ -69,7 +73,6 @@ const ProductContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 0 auto;
     border: 1px solid #ccc;
     padding: 20px;
     border-radius: 8px;
@@ -113,178 +116,98 @@ const AddToCartButton = styled.button`
 `;
 
 const HeaderAndProducts = () => {
+    const { id } = useParams();
+    const [restaurant, setRestaurant] = useState(null);
+    const [cartItems, setCartItems] = useState([]);
+    const [modalProduct, setModalProduct] = useState(null);
     const [isCartVisible, setCartVisible] = useState(false);
     const [isDeliveryModalVisible, setDeliveryModalVisible] = useState(false);
-    const [modalProduct, setModalProduct] = useState(null);
-    const [cartItems, setCartItems] = useState([]);
     const [isPaymentVisible, setPaymentVisible] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    const openModal = (product) => {
-        setModalProduct(product);
-    };
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setLoading(true);
+                const response = await fetch("https://fake-api-tau.vercel.app/api/efood/restaurantes");
+                if (!response.ok) throw new Error("Erro ao carregar os dados");
+                const data = await response.json();
+                const restaurantData = data.find((item) => item.id.toString() === id);
+                setRestaurant(restaurantData);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    const closeModal = () => {
-        setModalProduct(null);
-    };
-
-    const openCart = () => {
-        setCartVisible(!isCartVisible);
-    };
+        fetchData();
+    }, [id]);
 
     const addToCart = () => {
-        if (modalProduct) {
-            setCartItems([...cartItems, modalProduct]);
-        }
+        if (modalProduct) setCartItems([...cartItems, modalProduct]);
         setModalProduct(null);
     };
 
-    const onItemClick = (item) => {
-        openModal(item); // Abrir o modal para o item clicado
-    };
-
-    const handleContinueWithDelivery = () => {
-        setCartVisible(false); // Fecha o carrinho
-        setDeliveryModalVisible(true); // Abre o modal de entrega
-    };
-
-    const handleCloseDeliveryModal = () => {
-        setDeliveryModalVisible(false); // Fecha o modal de entrega
-        setCartVisible(true); // Reabre o carrinho
-    };
-
-    const handleProceedToPayment = () => {
-        setDeliveryModalVisible(false);  // Fecha o modal de entrega
-        setPaymentVisible(true);  // Abre o modal de pagamento
-    };
-
-    const [isConfirmationVisible, setConfirmationVisible] = useState(false);
-
-    const handleFinalizePayment = () => {
-        setPaymentVisible(false); // Fecha o modal de pagamento
-        setConfirmationVisible(true); // Abre o modal de confirmação
-    };
-
-    const handleCloseConfirmation = () => {
-        setConfirmationVisible(false); // Fecha o modal de confirmação
-    };
-
-    const products = [
-        { 
-            id: 1, 
-            name: 'Pizza Marguerita', 
-            price: 30, 
-            image: require('./pizza.png'), 
-            shortDescription: 'A clássica Marguerita', 
-            description: 'Uma pizza saborosa feita com molho de tomate, manjericão fresco e queijo mussarela de alta qualidade.' 
-        },
-        { 
-            id: 2, 
-            name: 'Pizza Quatro Queijos', 
-            price: 35, 
-            image: require('./pizza.png'), 
-            shortDescription: 'A favorita dos amantes de queijo', 
-            description: 'Uma combinação irresistível de queijo mussarela, parmesão, gorgonzola e provolone.' 
-        },
-        { 
-            id: 3, 
-            name: 'Pizza Portuguesa', 
-            price: 40, 
-            image: require('./pizza.png'), 
-            shortDescription: 'Tradicional e deliciosa', 
-            description: 'Pizza com presunto, ovos, cebolas, azeitonas e um toque especial de orégano.' 
-        },
-        { 
-            id: 4, 
-            name: 'Pizza Pepperoni', 
-            price: 38, 
-            image: require('./pizza.png'), 
-            shortDescription: 'Sabor marcante e picante', 
-            description: 'Coberta com fatias de pepperoni, queijo mussarela e um toque de pimenta.' 
-        },
-        { 
-            id: 5, 
-            name: 'Pizza Vegetariana', 
-            price: 32, 
-            image: require('./pizza.png'), 
-            shortDescription: 'Opção leve e saudável', 
-            description: 'Repleta de vegetais frescos como tomate, pimentão, cebola e azeitonas, combinados com queijo mussarela.' 
-        },
-        { 
-            id: 6, 
-            name: 'Pizza Frango com Catupiry', 
-            price: 36, 
-            image: require('./pizza.png'), 
-            shortDescription: 'Clássico dos sabores brasileiros', 
-            description: 'Pizza com suculentos pedaços de frango desfiado e um toque cremoso de catupiry.' 
-        },
-    ];
-    
-
     const cartCount = cartItems.length;
-    const totalPrice = cartItems.reduce((sum, item) => sum + item.price, 0);
+    const totalPrice = cartItems.reduce((sum, item) => sum + (item.preco || 0), 0);
 
     return (
         <>
             <HeaderBackground>
                 <HeaderContainer>
-                    <Title>Restaurante</Title>
+                    <Title>{restaurant?.titulo || "Restaurante"}</Title>
                     <LogoContainer>
                         <img src={svgLogo} alt="Logo" />
                     </LogoContainer>
-                    <CartInfo onClick={openCart}>
+                    <CartInfo onClick={() => setCartVisible(!isCartVisible)}>
                         {cartCount} itens no carrinho
                     </CartInfo>
                 </HeaderContainer>
             </HeaderBackground>
-
-            <Presentation />
-
-            <ProductsContainer>
-                {products.map((product) => (
-                    <ProductContainer key={product.id}>
-                        <ProductImage src={product.image} alt={product.name} />
-                        <ProductName>{product.name}</ProductName>
-                        <ProductDescription>{product.shortDescription}</ProductDescription>
-                        <AddToCartButton onClick={() => openModal(product)}>Adicionar ao carrinho</AddToCartButton>
-                    </ProductContainer>
-                ))}
-            </ProductsContainer>
-
-            {/* Modal do produto */}
+            {loading ? (
+                <p>Carregando...</p>
+            ) : error ? (
+                <p>Erro: {error}</p>
+            ) : (
+                <>
+                    <Description>{restaurant?.descricao}</Description>
+                    <ProductsContainer>
+                        {restaurant?.cardapio.map((product) => (
+                            <ProductContainer key={product.id}>
+                                <ProductImage src={product.foto} alt={product.nome} />
+                                <ProductName>{product.nome}</ProductName>
+                                <ProductDescription>{product.descricao}</ProductDescription>
+                                <AddToCartButton onClick={() => setModalProduct(product)}>
+                                    Adicionar ao carrinho
+                                </AddToCartButton>
+                            </ProductContainer>
+                        ))}
+                    </ProductsContainer>
+                </>
+            )}
             <ModalProduto
                 show={!!modalProduct}
                 product={modalProduct}
-                onClose={closeModal}
+                onClose={() => setModalProduct(null)}
                 onAddToCart={addToCart}
             />
-
-            {/* CartModal */}
             <CartModal
                 show={isCartVisible}
                 cartItems={cartItems}
-                onContinue={handleContinueWithDelivery}
                 totalPrice={totalPrice}
-                onItemClick={onItemClick}
+                onContinue={() => setDeliveryModalVisible(true)}
             />
-            
-            {/* DeliveryModal */}
             <DeliveryModal
                 show={isDeliveryModalVisible}
-                onClose={handleCloseDeliveryModal}
-                onContinue={handleProceedToPayment}
-            />        
-
-            {/* PaymentModal */}
+                onClose={() => setDeliveryModalVisible(false)}
+                onContinue={() => setPaymentVisible(true)}
+            />
             <PaymentModal
                 show={isPaymentVisible}
                 onClose={() => setPaymentVisible(false)}
-                onFinalize={handleFinalizePayment}
-            />
-
-            {/* ConfirmationModal */}
-            <ConfirmationModal 
-                show={isConfirmationVisible} 
-                onClose={handleCloseConfirmation} 
+                onFinalize={() => alert("Pagamento finalizado!")}
             />
         </>
     );
