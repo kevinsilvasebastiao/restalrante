@@ -141,13 +141,23 @@ const HeaderAndProducts = () => {
                 setLoading(false);
             }
         };
-
+    
         fetchData();
-    }, [id]);
+    }, [id]); // O ';' não é necessário aqui
 
     const addToCart = () => {
-        if (modalProduct) setCartItems([...cartItems, modalProduct]);
-        setModalProduct(null);
+        if (modalProduct) {
+            setCartItems([
+                ...cartItems,
+                {
+                    id: modalProduct.id,
+                    image: modalProduct.foto,
+                    name: modalProduct.nome,
+                    preco: modalProduct.preco, // Adicione caso necessário
+                },
+            ]);
+            setModalProduct(null);
+        }
     };
 
     const cartCount = cartItems.length;
@@ -189,7 +199,11 @@ const HeaderAndProducts = () => {
             )}
             <ModalProduto
                 show={!!modalProduct}
-                product={modalProduct}
+                product={{
+                    image: modalProduct?.foto,
+                    name: modalProduct?.nome,
+                    description: modalProduct?.descricao,
+                }}
                 onClose={() => setModalProduct(null)}
                 onAddToCart={addToCart}
             />

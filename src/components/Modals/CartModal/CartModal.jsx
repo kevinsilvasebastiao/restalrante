@@ -62,15 +62,19 @@
         <CartPanel show={show}>
             <h2>Carrinho</h2>
             {cartItems.map((item) => (
-                <CartItem key={item.id} onClick={() => onItemClick(item)}>
+                <CartItem key={item.id} onClick={() => onItemClick && onItemClick(item)}>
                     <CartItemImage src={item.image} alt={item.name} />
-                    <CartItemName>{item.name}</CartItemName>
+                    <CartItemName>
+                        {item.name} - R${item.preco.toFixed(2)}
+                    </CartItemName>
                 </CartItem>
             ))}
-            <CartTotal>Total: R${totalPrice.toFixed(2)}</CartTotal>
+            <CartTotal>
+                Total a pagar: <strong>R${totalPrice.toFixed(2)}</strong>
+            </CartTotal>
             <ContinueButton onClick={onContinue}>Continuar com a entrega</ContinueButton>
         </CartPanel>
     );
     
-
     export default CartModal;
+    
