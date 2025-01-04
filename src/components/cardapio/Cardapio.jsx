@@ -7,6 +7,8 @@ import ModalProduto from "../Modals/ProductModal/ProductModal";
 import CartModal from "../Modals/CartModal/CartModal";
 import DeliveryModal from "../Modals/DeliveryModal/DeliveryModal";
 import PaymentModal from "../Modals/PaymentModal/PaymentModal";
+import ConfirmationModal from '../Modals/ConfirmationModal/ConfirmationModal';
+
 
 const HeaderBackground = styled.div`
     width: 100%;
@@ -123,6 +125,7 @@ const HeaderAndProducts = () => {
     const [isCartVisible, setCartVisible] = useState(false);
     const [isDeliveryModalVisible, setDeliveryModalVisible] = useState(false);
     const [isPaymentVisible, setPaymentVisible] = useState(false);
+    const [isConfirmationVisible, setConfirmationVisible] = useState(false); // Adicionado aqui
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -143,7 +146,7 @@ const HeaderAndProducts = () => {
         };
     
         fetchData();
-    }, [id]); // O ';' não é necessário aqui
+    }, [id]);
 
     const addToCart = () => {
         if (modalProduct) {
@@ -153,7 +156,7 @@ const HeaderAndProducts = () => {
                     id: modalProduct.id,
                     image: modalProduct.foto,
                     name: modalProduct.nome,
-                    preco: modalProduct.preco, // Adicione caso necessário
+                    preco: modalProduct.preco,
                 },
             ]);
             setModalProduct(null);
@@ -221,10 +224,18 @@ const HeaderAndProducts = () => {
             <PaymentModal
                 show={isPaymentVisible}
                 onClose={() => setPaymentVisible(false)}
-                onFinalize={() => alert("Pagamento finalizado!")}
+                onFinalize={() => {
+                    setPaymentVisible(false);
+                    setConfirmationVisible(true);
+                }}
+            />
+            <ConfirmationModal
+                show={isConfirmationVisible}
+                onClose={() => setConfirmationVisible(false)}
             />
         </>
     );
 };
+
 
 export default HeaderAndProducts;
