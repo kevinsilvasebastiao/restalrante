@@ -229,10 +229,6 @@ const HeaderAndProducts = () => {
                     setConfirmationVisible(true);
                 }}
             />
-            <ConfirmationModal
-                show={isConfirmationVisible}
-                onClose={() => setConfirmationVisible(false)}
-            />
         </>
     );
 };
