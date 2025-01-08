@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
+// Estilização
 const PaymentPanel = styled.div`
   display: ${({ $show }) => ($show ? 'block' : 'none')};
   position: fixed;
   right: 0;
   top: 0;
-  width: 300px;
+  width: 400px;
   height: 100%;
   background: #e66767;
   padding: 20px;
@@ -20,18 +21,39 @@ const PaymentHeader = styled.h2`
   margin-bottom: 20px;
 `;
 
-const PaymentField = styled.input`
-  width: 100%;
-  padding: 10px;
+const FormGroup = styled.div`
   margin-bottom: 15px;
+  width: 100%;
+`;
+
+const Label = styled.label`
+  display: block;
+  font-size: 14px;
+  color: #ffe9d9;
+  margin-bottom: 5px;
+`;
+
+const PaymentField = styled.input`
+  width: 95%;
+  padding: 10px;
   border: none;
-  border-radius: 5px;
   background: #ffe9d9;
   color: #333;
 
   &:invalid {
     border: 2px solid #ff4d4d;
   }
+`;
+
+const Row = styled.div`
+  display: flex;
+  justify-content: space-between; /* Distribui o espaço disponível entre os itens */
+  gap: 10px;
+  width: 100%; /* Garante que o Row ocupe toda a largura disponível */
+`;
+
+const HalfWidthField = styled(PaymentField)`
+  width: calc(90% - 5px);
 `;
 
 const PaymentButton = styled.button`
@@ -105,6 +127,16 @@ const CloseButton = styled.button`
   }
 `;
 
+const CardNumberField = styled(PaymentField)`
+  width: 70%; /* Ajuste a largura do número do cartão */
+`;
+
+const CVVField = styled(PaymentField)`
+  width: 25%; /* Ajuste a largura do CVV */
+  text-align: right; /* Alinha o conteúdo do campo à direita */
+  margin-left: auto; /* Coloca o CVV no final da linha */
+`;
+
 const PaymentModal = ({ show, onClose, onFinalize }) => {
   const [formData, setFormData] = useState({
     cardName: '',
@@ -130,12 +162,7 @@ const PaymentModal = ({ show, onClose, onFinalize }) => {
   const handleFinalizeClick = async () => {
     try {
       const requestBody = {
-        products: [
-          {
-            id: 1,
-            price: 0,
-          },
-        ],
+        products: [{ id: 1, price: 0 }],
         delivery: {
           receiver: "Nome do destinatário",
           address: {
@@ -174,8 +201,7 @@ const PaymentModal = ({ show, onClose, onFinalize }) => {
       const data = await response.json();
       setOrderId(data.orderId);
       setOrderConfirmed(true);
-      console.log('Resposta da API:', data);
-      onClose(); // Fechar o modal após a confirmação
+      onClose();
     } catch (error) {
       alert('Erro ao realizar o pagamento: ' + error.message);
     }
@@ -185,52 +211,77 @@ const PaymentModal = ({ show, onClose, onFinalize }) => {
     <>
       <PaymentPanel $show={show}>
         <PaymentHeader>Pagamento</PaymentHeader>
-        <PaymentField
-          type="text"
-          name="cardName"
-          placeholder="Nome no Cartão"
-          value={formData.cardName}
-          onChange={handleChange}
-        />
-        <PaymentField
-          type="text"
-          name="cardNumber"
-          placeholder="Número do Cartão"
-          value={formData.cardNumber}
-          onChange={handleChange}
-        />
-        <PaymentField
-          type="text"
-          name="cvv"
-          placeholder="CVV"
-          value={formData.cvv}
-          onChange={handleChange}
-        />
-        <PaymentField
-          type="text"
-          name="expMonth"
-          placeholder="Mês de Vencimento"
-          value={formData.expMonth}
-          onChange={handleChange}
-        />
-        <PaymentField
-          type="text"
-          name="expYear"
-          placeholder="Ano de Vencimento"
-          value={formData.expYear}
-          onChange={handleChange}
-        />
+
+        <FormGroup>
+          <Label htmlFor="cardName">Nome no Cartão</Label>
+          <PaymentField
+            id="cardName"
+            type="text"
+            name="cardName"
+            value={formData.cardName}
+            onChange={handleChange}
+          />
+        </FormGroup>
+
+        <Row>
+          <FormGroup>
+            <Label htmlFor="cardNumber">Número do Cartão</Label>
+            <CardNumberField
+              id="cardNumber"
+              type="text"
+              name="cardNumber"
+              value={formData.cardNumber}
+              onChange={handleChange}
+            />
+          </FormGroup>
+
+          <FormGroup>
+            <Label htmlFor="cvv">CVV</Label>
+            <CVVField
+              id="cvv"
+              type="text"
+              name="cvv"
+              value={formData.cvv}
+              onChange={handleChange}
+            />
+          </FormGroup>
+        </Row>
+
+        <Row>
+          <FormGroup>
+            <Label htmlFor="expMonth">Mês de Vencimento</Label>
+            <HalfWidthField
+              id="expMonth"
+              type="text"
+              name="expMonth"
+              value={formData.expMonth}
+              onChange={handleChange}
+            />
+          </FormGroup>
+
+          <FormGroup>
+            <Label htmlFor="expYear">Ano de Vencimento</Label>
+            <HalfWidthField
+              id="expYear"
+              type="text"
+              name="expYear"
+              value={formData.expYear}
+              onChange={handleChange}
+            />
+          </FormGroup>
+        </Row>
+
         <PaymentButton disabled={!isFormValid} onClick={handleFinalizeClick}>
           Finalizar Pagamento
         </PaymentButton>
-        <PaymentButton onClick={onClose}>Fechar</PaymentButton>
+        <PaymentButton onClick={onClose}>Voltar para a edição de endereço</PaymentButton>
       </PaymentPanel>
 
       {/* Tela de confirmação do pedido */}
       <ConfirmationPanel show={isOrderConfirmed}>
         <ConfirmationMessage>Pedido realizado</ConfirmationMessage>
         <Message>
-          Estamos felizes em informar que seu pedido já está em processo de preparação e, 
+          Estamos felizes em informar que seu pedido já está em processo de preparação e,
           em breve, será entregue no endereço fornecido.
           <br /><br />
           Gostaríamos de ressaltar que nossos entregadores não estão autorizados a realizar cobranças extras.

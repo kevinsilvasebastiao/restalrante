@@ -6,13 +6,14 @@ const DeliveryPanel = styled.div`
   position: fixed;
   right: 0;
   top: 0;
-  width: 300px;
+  width: 342px;
   height: 100%;
   background: #e66767;
   padding: 20px;
   box-shadow: -2px 0px 10px rgba(0, 0, 0, 0.5);
   z-index: 1000;
   overflow-y: auto;
+  box-sizing: border-box; /* Garante que padding não expanda o tamanho */
 `;
 
 const DeliveryHeader = styled.h2`
@@ -21,17 +22,26 @@ const DeliveryHeader = styled.h2`
 `;
 
 const DeliveryField = styled.input`
-  width: 100%;
+  width: 93%;
   padding: 10px;
   margin-bottom: 15px;
   border: none;
-  border-radius: 5px;
   background: #ffe9d9;
   color: #333;
 
   &:invalid {
     border: 2px solid #ff4d4d;
   }
+`;
+
+const DeliveryFieldRow = styled.div`
+  display: flex;
+  gap: 10px; /* Espaço entre os campos */
+  margin-bottom: 15px;
+`;
+
+const HalfWidthField = styled(DeliveryField)`
+  width: calc(50% - 5px); /* Ajusta largura para caber lado a lado */
 `;
 
 const DeliveryButton = styled.button`
@@ -56,7 +66,15 @@ const DeliveryButton = styled.button`
     cursor: not-allowed;
   }
 `;
+// Estilo dos labels
+const DeliveryLabel = styled.label`
+  display: block;
+  color: #FFF8F2;
+  font-size: 14px;
+  margin-bottom: 5px;
+`;
 
+// Atualização do componente DeliveryModal
 const DeliveryModal = ({ show, onClose, onContinue }) => {
   const [formData, setFormData] = useState({
     recipient: '',
@@ -64,6 +82,7 @@ const DeliveryModal = ({ show, onClose, onContinue }) => {
     city: '',
     zip: '',
     number: '',
+    complement: '', // Novo campo para complemento
   });
 
   const [isFormValid, setFormValid] = useState(false);
@@ -73,49 +92,77 @@ const DeliveryModal = ({ show, onClose, onContinue }) => {
     const updatedFormData = { ...formData, [name]: value };
     setFormData(updatedFormData);
 
-    // Check if all fields are filled
-    const allFieldsFilled = Object.values(updatedFormData).every((field) => field.trim() !== '');
+    // Verificar se os campos obrigatórios estão preenchidos
+    const requiredFields = ['recipient', 'address', 'city', 'zip', 'number'];
+    const allFieldsFilled = requiredFields.every((field) => updatedFormData[field].trim() !== '');
     setFormValid(allFieldsFilled);
   };
 
   return (
     <DeliveryPanel show={show}>
       <DeliveryHeader>Dados da Entrega</DeliveryHeader>
-      <DeliveryField
-        type="text"
-        name="recipient"
-        placeholder="Quem irá receber"
-        value={formData.recipient}
-        onChange={handleChange}
-      />
-      <DeliveryField
-        type="text"
-        name="address"
-        placeholder="Endereço"
-        value={formData.address}
-        onChange={handleChange}
-      />
-      <DeliveryField
-        type="text"
-        name="city"
-        placeholder="Cidade"
-        value={formData.city}
-        onChange={handleChange}
-      />
-      <DeliveryField
-        type="text"
-        name="zip"
-        placeholder="CEP"
-        value={formData.zip}
-        onChange={handleChange}
-      />
-      <DeliveryField
-        type="text"
-        name="number"
-        placeholder="Número"
-        value={formData.number}
-        onChange={handleChange}
-      />
+
+      <div>
+        <DeliveryLabel>Quem irá receber</DeliveryLabel>
+        <DeliveryField
+          type="text"
+          name="recipient"
+          value={formData.recipient}
+          onChange={handleChange}
+        />
+      </div>
+
+      <div>
+        <DeliveryLabel>Endereço</DeliveryLabel>
+        <DeliveryField
+          type="text"
+          name="address"
+          value={formData.address}
+          onChange={handleChange}
+        />
+      </div>
+
+      <div>
+        <DeliveryLabel>Cidade</DeliveryLabel>
+        <DeliveryField
+          type="text"
+          name="city"
+          value={formData.city}
+          onChange={handleChange}
+        />
+      </div>
+
+      <DeliveryFieldRow>
+        <div style={{ width: '48%' }}>
+          <DeliveryLabel>CEP</DeliveryLabel>
+          <HalfWidthField
+            type="text"
+            name="zip"
+            value={formData.zip}
+            onChange={handleChange}
+          />
+        </div>
+        <div style={{ width: '48%' }}>
+          <DeliveryLabel>Número</DeliveryLabel>
+          <HalfWidthField
+            type="text"
+            name="number"
+            value={formData.number}
+            onChange={handleChange}
+          />
+        </div>
+      </DeliveryFieldRow>
+
+      <div>
+        <DeliveryLabel>Complemento (opcional)</DeliveryLabel>
+        <DeliveryField
+          type="text"
+          name="complement"
+          value={formData.complement}
+          onChange={handleChange}
+        />
+      </div>
+
       <DeliveryButton disabled={!isFormValid} onClick={onContinue}>
         Continuar para pagamento
       </DeliveryButton>
